@@ -1,8 +1,10 @@
 #!/bin/bash
 
-# Script to create teh folder tree
+# Script to create the folder tree
 # USAGE: folder_tree_data_science_projects.sh  # will run in "."
 # USAGE: folder_tree_data_science_projects.sh /path/to/your/folder # will run in "/path/to/your/folder"
+
+set -e
 
 # -- Path
 WHERE="$1"
@@ -10,21 +12,22 @@ WHERE="$1"
 # -- If not path, run it here
 if [ -z "$1" ];
   then
-    echo "No path provided. Running in ''.''";
+    echo "No path provided. Running in '.'";
 else
   	echo "Path provided. Running in $WHERE";
-    # -- Moving to PATH
-    cd $WHERE
+    # -- Moving to PATH (created if it does not exist)
+    mkdir -p "$WHERE"
+    cd "$WHERE"
 fi
 
-# -- Create README
-echo "README" > ./README
+# -- Create README (existing files are kept)
+[ -e ./README ] || echo "README" > ./README
 
 # -- Create LICENSE
-echo "LICENSE" > ./LICENSE
+[ -e ./LICENSE ] || echo "LICENSE" > ./LICENSE
 
 # -- Create first level folders
-mkdir doc notebook src model data
+mkdir -p doc notebook src model data
 
 # -- Create second level folders
-cd model && mkdir current superseded
+cd model && mkdir -p current superseded
