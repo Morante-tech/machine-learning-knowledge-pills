@@ -1,4 +1,8 @@
 # Reproducible Data Science (a practical approach)
+
+> Written in 2016 and reviewed in 2026. The principles are unchanged; the tool suggestions
+> and links were updated, and the tools recommended originally that no longer exist are noted.
+
 This proposal aims to show a comprehensive methodology and framework to tackle Big Data analytical problems. Data Science is a recent area fostered by recent advances in computation, and the availability of massive datasets about nearly everything. This fact makes the field a little immature with respect to experiment protocols, process tracking and reproducibility of results.
 
 For any scientific problem, and also in Data Science, it is important to keep track of the experiments (who did this, where it came from, how it was done, what data was used, what model was trained, etc). It is also important to ensure the reproducibility of the results to be able to repeat an experiment with the same data and the same model. 
@@ -55,7 +59,9 @@ However, in real life, data is kept blocked and cannot be extracted from the sto
 
 ### Tentative tools
 
-The most used version control system currently is [**Git**](https://git-scm.com/). If you are using an integrated analytical tool, make sure it includes a version control system. 
+The most used version control system is [**Git**](https://git-scm.com/). If you are using an integrated analytical tool, make sure it includes a version control system.
+
+Git is designed for code, not for large datasets or models. Tools like [**DVC**](https://dvc.org/) or [**Git LFS**](https://git-lfs.com/) keep large files outside the repository while versioning them together with the code.
 
 
 ## Documentation
@@ -105,13 +111,13 @@ It is also a good practice to include a *README* file explaining the folder tree
 
 We can distinguish two types of documentation, that is, code documentation, and modeling documentation. For the former case, we can use traditional automatic code documentation tools like Sphinx:
 
-* [**Sphinx**](http://www.sphinx-doc.org/en/1.4.8/):  is a documentation generator for code. It integrates perfectly with Git. It generates nice documentation systems, which can be modified with themes like  [**readthedocs**](http://docs.readthedocs.io/en/latest/theme.html). To allow Sphinx to document your code, it has to include specific comments on function sand classes.
+* [**Sphinx**](https://www.sphinx-doc.org/) is a documentation generator for code. It integrates perfectly with Git. It generates nice documentation sites, which can be modified with themes like [**Read the Docs**](https://sphinx-rtd-theme.readthedocs.io/). To allow Sphinx to document your code, it has to include specific comments (docstrings) on functions and classes. [**MkDocs**](https://www.mkdocs.org/) is a simpler alternative based on Markdown.
 
 For the latter, we can use markup documents and notebooks:
 
 * [**Markdown**](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links), [**rst**](http://docutils.sourceforge.net/rst.html): these are examples of markup languages with plain text formatting syntax designed so that they can be easily converted to HTML. Sphinx can read these types of files and create a webapp, and programs like RStudio or Jupyter notebooks allow exporting to these file formats. They can (and should) be also used to create user tutorials, readmes and execution instructions.
 
-* **Notebooks**: the most used analytical languages (Python, R, Scala) can make use of notebooks. Notebooks are interactive computational environments in which you can combine code (and its output execution), formatted text, equations and figures. One famous notebook framework is [**Jupyter**](http://jupyter.org/) (there are others, like [**Zeppelin**](https://zeppelin.apache.org/)).
+* **Notebooks**: the most used analytical languages (Python, R, Scala) can make use of notebooks. Notebooks are interactive computational environments in which you can combine code (and its output execution), formatted text, equations and figures. The most famous notebook framework is [**Jupyter**](https://jupyter.org/) (there are others, like [**Zeppelin**](https://zeppelin.apache.org/)). [**Quarto**](https://quarto.org/) can turn notebooks and Markdown into reports, websites and slides.
 
 
 ## Open code and open data
@@ -130,11 +136,13 @@ A couple of advices to tackle an analytical problem:
 
 In this case, opening the code and the data depends on your analytics platform and the permissions given by the system administrators.
 
-* Collaborative tools like [**Dataiku DSS**](http://www.dataiku.com/) allow sharing workflows, code and data easily across organizations.
+* Collaborative tools like [**Dataiku**](https://www.dataiku.com/) allow sharing workflows, code and data easily across organizations.
 
 * If your business allows it, open platforms like [**Github**](https://github.com/) or [**Gitlab**](https://gitlab.com/) provide a wider audience for your analysis.
 
-* Results can also be made public in platforms like [**Rpubs**](https://rpubs.com/) or [**Gitbooks**](https://www.gitbook.com/).
+* Trained models and datasets can be shared on the [**Hugging Face Hub**](https://huggingface.co/).
+
+* Results can also be made public in platforms like [**RPubs**](https://rpubs.com/), [**GitBook**](https://www.gitbook.com/) or a static site published with GitHub Pages.
 
 ## Traceability and availability
 
@@ -147,7 +155,9 @@ A complex analytics project (most of them in the Big Data world) is composed by 
 
 ### Tentative tools
 
-The tools that enable to perform this kind of tracking are usually named data governance tools. A very complete suite is [**Cloudera Navigator**](http://www.cloudera.com/products/cloudera-navigator.html). It allows to track, classify, and locate data using metadata. Another option is [**Waterline Data**](http://www.waterlinedata.com/prod/).
+The tools that enable this kind of tracking are usually named data governance tools, or data catalogs. They track, classify and locate data using metadata, and record its lineage (which process produced which dataset). Open source options are [**Apache Atlas**](https://atlas.apache.org/), [**DataHub**](https://datahubproject.io/) and the [**OpenLineage**](https://openlineage.io/) standard.
+
+*In 2016 this guide recommended Cloudera Navigator and Waterline Data, which are no longer available as standalone products.*
 
 ## Reproducibility
 
@@ -162,7 +172,12 @@ The tools that enable to perform this kind of tracking are usually named data go
 
 ### Tentative tools
 
-In this case, to assure the reproducibility of experiments, the guides provided does not require special tools. The information can be included in the project documentation, using the tools already commented, the models can be kept, using the folder structure already specified, and versions can be recorded, using a version control systems mentioned.
+The practices above do not require special tools: the information can be included in the project documentation, the models can be kept using the folder structure already specified, and versions can be recorded with the version control system.
+
+However, some tools make them much easier:
+
+* Experiment trackers like [**MLflow**](https://mlflow.org/) or [**Weights & Biases**](https://wandb.ai/) record the parameters, data versions, metrics and trained model of every run.
+* Lock files (for example with [**uv**](https://docs.astral.sh/uv/) in Python) pin the exact version of every library, and containers like [**Docker**](https://www.docker.com/) freeze the whole environment, so the same code gives the same results years later.
 
 
 ## Automation
@@ -170,7 +185,7 @@ In this case, to assure the reproducibility of experiments, the guides provided 
 To facilitate the reproducibility of experiments, it is recommended to use automation tools that automatically:
 
 * Compile the code
-* Run unitary tests
+* Run unit tests
 * Check code quality
 * Generate documentation
 
@@ -181,13 +196,13 @@ These tools usually integrate well with Git, by performing all the analysis once
 
 There are many tools of this type. They are commonly used in the production phase of projects, but it is advisable to include them also during the development phase. Let me name a few:
 
-* [Jenkins](https://jenkins.io/) is an automation server that helps compiling the code. Another option is [Gitlab CI](https://about.gitlab.com/gitlab-ci/).
-* [SonarQube](http://www.sonarqube.org/) is a platform to automatically manage code quality and run unitary tests.
-* A bug/issue tracking system, like [Bugzilla](https://www.bugzilla.org/), despite not being an automation tool *per se*, can be included to accelerate the process of solving issues within the project.
+* [GitHub Actions](https://docs.github.com/actions) and [GitLab CI/CD](https://docs.gitlab.com/ee/ci/) run these checks on every commit, directly from the repository. [Jenkins](https://www.jenkins.io/) is a self-hosted automation server.
+* [SonarQube](https://www.sonarsource.com/products/sonarqube/) is a platform to automatically manage code quality. Linters and formatters like [Ruff](https://docs.astral.sh/ruff/), run with [pre-commit](https://pre-commit.com/), catch many problems before the code is even committed.
+* A bug/issue tracking system, like GitHub or GitLab issues, [Jira](https://www.atlassian.com/software/jira) or [Bugzilla](https://www.bugzilla.org/), despite not being an automation tool *per se*, can be included to accelerate the process of solving issues within the project.
 
 
 ## The Final Picture
-Let me recap all topics covered by using a picture. We can represent the best methodology in Data Science by means of the tools. The example represents a framework that would accomplish the gold standard methodology described.
+Let me recap all topics covered by using a picture. We can represent the best methodology in Data Science by means of the tools. The example represents a framework that would accomplish the gold standard methodology described (with the tools of 2016).
 
 <center>
     <img src="images/workflow.png" width="500">
