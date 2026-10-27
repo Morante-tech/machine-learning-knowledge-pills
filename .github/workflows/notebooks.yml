@@ -1,0 +1,27 @@
+name: notebooks
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  schedule:
+    - cron: "0 6 1 * *"  # monthly, to notice when new library versions break a notebook
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: pip install -r requirements.txt
+      - name: Execute notebooks
+        run: |
+          find . -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" -print0 |
+            xargs -0 -n1 jupyter nbconvert --to notebook --execute --stdout > /dev/null
+      - name: Check the folder tree script
+        run: |
+          bash reproducible-data-science/utils/folder_tree_data_science_projects.sh "$RUNNER_TEMP/project"
+          test -d "$RUNNER_TEMP/project/model/superseded"
