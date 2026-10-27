@@ -1,2 +1,16 @@
-# machine-learning-knowledge-pills
-Small tutorials and posts explaining things about Machine Learning and Data Science
+# Machine Learning Knowledge Pills
+
+Small tutorials and posts explaining practical things about Machine Learning and Data Science.
+
+| Pill | Content |
+|---|---|
+| [Data normalization](data-normalization/warnings-about-normalizing-data.ipynb) | Notebook showing how common scalers (min-max, standard, robust) can distort your data |
+| [Data normalization, Spanish talk](data-normalization/spanish-presentation/data_science_no_es_un_boton.ipynb) | Slides (as a notebook) of the talk *"Data Science no es un botón"* |
+| [Reproducible data science](reproducible-data-science/reproducible-data-science.md) | A practical methodology to keep data science projects traceable and reproducible |
+
+> **Status:** written in 2016. A review to update the notebooks and the methodology is planned.
+
+## License
+
+The texts, slides and images are licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](LICENSE).
+The code snippets in the notebooks and scripts can be reused under the [MIT License](https://opensource.org/license/mit).
